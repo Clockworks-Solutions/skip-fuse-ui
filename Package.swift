@@ -12,12 +12,12 @@ let package = Package(
         .library(name: "SkipSwiftUISamples", type: .dynamic, targets: ["SkipSwiftUISamples"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/skiptools/skip.git", from: "1.9.4"),
-        .package(url: "https://github.com/skiptools/skip-fuse.git", from: "1.0.2"),
-        .package(url: "https://github.com/skiptools/skip-bridge.git", "0.17.2"..<"2.0.0"),
-        .package(url: "https://github.com/skiptools/skip-android-bridge.git", "0.6.4"..<"2.0.0"),
+        .package(url: "https://github.com/skiptools/skip.git", from: "1.9.8"),
+        .package(url: "https://github.com/skiptools/skip-fuse.git", from: "1.0.3"),
+        .package(url: "https://github.com/skiptools/skip-bridge.git", "0.17.3"..<"2.0.0"),
+        .package(url: "https://github.com/skiptools/skip-android-bridge.git", "0.6.6"..<"2.0.0"),
         .package(url: "https://github.com/skiptools/swift-jni.git", "0.5.0"..<"2.0.0"),
-		.package(url: "https://github.com/Clockworks-Solutions/skip-ui.git", branch: "main")
+    		.package(url: "https://github.com/Clockworks-Solutions/skip-ui.git", branch: "main")
     ],
     targets: [
         .target(name: "SkipFuseUI", dependencies: ["SkipSwiftUI"]),
