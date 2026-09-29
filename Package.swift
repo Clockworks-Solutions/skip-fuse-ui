@@ -8,7 +8,10 @@ let package = Package(
     platforms: [.iOS(.v17), .macOS(.v14), .tvOS(.v17), .watchOS(.v10), .macCatalyst(.v17)],
     products: [
         .library(name: "SkipFuseUI", type: .dynamic, targets: ["SkipFuseUI"] + (android ? ["SwiftUI"] : [])),
-        .library(name: "SkipSwiftUI", type: .dynamic, targets: ["SkipSwiftUI"]),
+        // Automatic (not .dynamic): the product name matches the target name, and an explicitly
+        // dynamic product with that name blocks Swift Build from giving the target a dynamic
+        // variant, which it needs when two dynamic products both link SkipSwiftUI statically.
+        .library(name: "SkipSwiftUI", targets: ["SkipSwiftUI"]),
         .library(name: "SkipSwiftUISamples", type: .dynamic, targets: ["SkipSwiftUISamples"]),
     ],
     dependencies: [
@@ -44,6 +47,9 @@ let package = Package(
             .product(name: "SkipAndroidBridge", package: "skip-android-bridge"),
             .product(name: "SkipTest", package: "skip")
         ], plugins: [.plugin(name: "skipstone", package: "skip")]),
+        // Apple SwiftUI reference rendering for the animation-lifetime experiment.
+        // No Skip plugin: AppKit pixel sampling must never be transpiled.
+        .testTarget(name: "AnimationLifetimeReferenceTests", dependencies: ["SkipSwiftUISamples"]),
     ]
 )
 
