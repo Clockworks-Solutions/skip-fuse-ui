@@ -64,18 +64,31 @@ extension View {
         }
     }
 
+    /// Sets how the tab bar of a `TabView` minimizes as its content scrolls.
+    ///
+    /// On Android only the Liquid Glass tab bar minimizes; the Material 3 `NavigationBar`, used when
+    /// `EnvironmentValues.liquidGlass` resolves to Material rendering, keeps its size whatever the behavior.
+    ///
+    /// ```swift
+    /// TabView { ... }
+    ///     .tabBarMinimizeBehavior(.onScrollDown)
+    /// ```
     nonisolated public func tabBarMinimizeBehavior(_ behavior: TabBarMinimizeBehavior) -> some View {
-        // We only support automatic, never
-        return self
+        return ModifierView(target: self) { // Liquid Glass: see SkipUI TabView+LiquidGlass.swift
+            $0.Java_viewOrEmpty.tabBarMinimizeBehavior(bridgedBehavior: behavior.identity)
+        }
     }
 }
 
+/// How a `TabView`'s tab bar minimizes in response to scrolling.
 public struct TabBarMinimizeBehavior : Hashable, Sendable {
+    /// The platform default. On Android, as on iOS, the tab bar never minimizes.
     public static let automatic = TabBarMinimizeBehavior(identity: 1)
-    @available(*, unavailable)
-    public static let onScrollDown = TabBarMinimizeBehavior(identity: 2)
-    @available(*, unavailable)
-    public static let onScrollUp = TabBarMinimizeBehavior(identity: 3)
+    /// Minimize the tab bar while content scrolls toward its end, and restore it when content scrolls back.
+    public static let onScrollDown = TabBarMinimizeBehavior(identity: 2) // Liquid Glass: supported by the glass tab bar
+    /// Minimize the tab bar while content scrolls toward its start, and restore it when content scrolls back.
+    public static let onScrollUp = TabBarMinimizeBehavior(identity: 3) // Liquid Glass: supported by the glass tab bar
+    /// Never minimize the tab bar.
     public static let never = TabBarMinimizeBehavior(identity: 4)
 
     let identity: Int
@@ -746,30 +759,33 @@ extension TabContent {
     }
 }
 
+// Liquid Glass: tab badges are bridged through SkipUI's `TabContent.tabBadge(bridgedLabel:)`, see SkipUI TabView+LiquidGlass.swift
 extension TabContent {
-    @available(*, unavailable)
+    /// Shows `count` as a badge on this tab's item in the tab bar, or no badge when `count` is zero.
     nonisolated public func badge(_ count: Int) -> some TabContent<Self.TabValue> {
-        return self
+        return badge(count == 0 ? nil : Text(verbatim: String(describing: count)))
     }
 
-    @available(*, unavailable)
+    /// Shows `label` as a badge on this tab's item in the tab bar, or removes the badge when `label` is `nil`.
     nonisolated public func badge(_ label: Text?) -> some TabContent<Self.TabValue> {
-        return self
+        var tabContent = self
+        tabContent.modifiers.append({ ($0 as? any SkipUI.TabContent)?.tabBadge(bridgedLabel: label?.Java_view as? SkipUI.Text) ?? $0 })
+        return tabContent
     }
 
-    @available(*, unavailable)
+    /// Shows the localized string for `key` as a badge on this tab's item in the tab bar.
     nonisolated public func badge(_ key: LocalizedStringKey) -> some TabContent<Self.TabValue> {
-        return self
+        return badge(Text(key))
     }
 
-    @available(*, unavailable)
+    /// Shows the localized string for `resource` as a badge on this tab's item in the tab bar.
     @_disfavoredOverload nonisolated public func badge(_ resource: AndroidLocalizedStringResource) -> some TabContent<Self.TabValue> {
-        return self
+        return badge(Text(resource))
     }
 
-    @available(*, unavailable)
+    /// Shows `label`, unlocalized, as a badge on this tab's item in the tab bar.
     @_disfavoredOverload nonisolated public func badge<S>(_ label: S) -> some TabContent<Self.TabValue> where S : StringProtocol {
-        return self
+        return badge(Text(label))
     }
 }
 
