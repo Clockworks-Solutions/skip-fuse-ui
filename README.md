@@ -168,6 +168,14 @@ For the full list of supported SwiftUI components, see the [SkipUI documentation
 
 `simultaneousGesture` support follows SkipUI's current Android limitations: it can observe supported gestures on the same rendered view, including drag observation while scroll views continue scrolling, but only `.all` and `.none` have meaningful mask behavior. `.gesture` and `.subviews` masks are not distinguished.
 
+### Liquid Glass (Clockworks fork)
+
+On Android, `TabView`, navigation bars, and toolbars render with Liquid Glass through the
+[Clockworks SkipUI fork](https://github.com/Clockworks-Solutions/skip-ui/tree/liquid-glass). This fork adds the
+SwiftUI API that controls it: `EnvironmentValues.liquidGlass`, `tabBarMinimizeBehavior(_:)`, `Tab.badge(_:)`, the
+`.glass` and `.glassProminent` button styles, and `glassEffect(_:in:isEnabled:)`. See
+[`Sources/SkipSwiftUI/LiquidGlass/README.md`](Sources/SkipSwiftUI/LiquidGlass/README.md).
+
 ### Text Selection
 
 SkipFuseUI supports programmatic text selection for editable text controls that expose a `TextSelection` binding, such as `TextField` and `TextEditor`.
