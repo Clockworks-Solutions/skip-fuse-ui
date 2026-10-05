@@ -7,6 +7,7 @@
 @_exported import SwiftUI
 @_exported import struct SkipSwiftUI.TextSelectionIndex
 @_exported import struct SkipSwiftUI.TextSelectionRange
+@_exported import enum SkipSwiftUI.LiquidGlass // Liquid Glass: see SkipSwiftUI/LiquidGlass/README.md
 
 extension View where Self: Equatable {
     /// Returns this view unchanged on Apple platforms.
@@ -40,6 +41,23 @@ extension View {
         inputs: String = ""
     ) -> some View {
         self
+    }
+}
+
+// MARK: - EnvironmentValues: LiquidGlass
+
+private struct LiquidGlassKey: EnvironmentKey {
+    static let defaultValue: LiquidGlass = .adaptive
+}
+
+extension EnvironmentValues {
+    /// Whether glass components render with Liquid Glass on Android.
+    ///
+    /// Stored in the environment on Apple platforms so shared code compiles unchanged, but has no effect there: iOS
+    /// renders Liquid Glass natively. On Android the matching `SkipSwiftUI` value picks how glass renders.
+    public var liquidGlass: LiquidGlass {
+        get { self[LiquidGlassKey.self] }
+        set { self[LiquidGlassKey.self] = newValue }
     }
 }
 #endif
