@@ -4,7 +4,7 @@ import SkipFuse
 import SkipUI
 
 public struct DisclosureGroup<Label, Content> where Label : View, Content : View {
-    private let isExpanded: Binding<Bool>? // nil keeps its own state
+    private let isExpanded: Binding<Bool>?
     private let label: Label
     private let content: Content
 
@@ -27,10 +27,11 @@ extension DisclosureGroup : View {
 
 extension DisclosureGroup : SkipUIBridging {
     public var Java_view: any SkipUI.View {
-        guard let isExpanded else {
+        if let isExpanded {
+            return SkipUI.DisclosureGroup(getExpanded: { isExpanded.wrappedValue }, setExpanded: { isExpanded.wrappedValue = $0 }, bridgedContent: content.Java_viewOrEmpty, bridgedLabel: label.Java_viewOrEmpty)
+        } else {
             return SkipUI.DisclosureGroup(bridgedContent: content.Java_viewOrEmpty, bridgedLabel: label.Java_viewOrEmpty)
         }
-        return SkipUI.DisclosureGroup(getExpanded: { isExpanded.wrappedValue }, setExpanded: { isExpanded.wrappedValue = $0 }, bridgedContent: content.Java_viewOrEmpty, bridgedLabel: label.Java_viewOrEmpty)
     }
 }
 
