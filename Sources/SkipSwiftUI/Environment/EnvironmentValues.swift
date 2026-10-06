@@ -87,6 +87,8 @@ extension EnvironmentValues {
         case "layoutDirection":
             let rawValue = bridgedValue as? Int
             return rawValue == nil ? LayoutDirection.leftToRight : LayoutDirection(rawValue: rawValue!) ?? .leftToRight
+        case "liquidGlass": // Liquid Glass: see LiquidGlass/LiquidGlass.swift
+            return LiquidGlass(rawValue: bridgedValue as? Int ?? LiquidGlass.adaptive.rawValue) ?? .adaptive
         case "lineLimit":
             return bridgedValue as? Int
         case "locale":
@@ -187,6 +189,8 @@ extension EnvironmentValues {
             return value as? Bool == true
         case "layoutDirection":
             return ((value as? LayoutDirection) ?? .leftToRight).rawValue
+        case "liquidGlass": // Liquid Glass: see LiquidGlass/LiquidGlass.swift
+            return (value as? LiquidGlass ?? .adaptive).rawValue
         case "lineLimit":
             return value as? Int
         case "locale":
@@ -272,6 +276,7 @@ extension EnvironmentValues {
         keys[\EnvironmentValues.isEnabled] = "isEnabled"
         keys[\EnvironmentValues.isSearching] = "isSearching"
         keys[\EnvironmentValues.layoutDirection] = "layoutDirection"
+        keys[\EnvironmentValues.liquidGlass] = "liquidGlass" // Liquid Glass: see LiquidGlass/LiquidGlass.swift
         keys[\EnvironmentValues.lineLimit] = "lineLimit"
         keys[\EnvironmentValues.locale] = "locale"
         keys[\EnvironmentValues.openURL] = "openURL"

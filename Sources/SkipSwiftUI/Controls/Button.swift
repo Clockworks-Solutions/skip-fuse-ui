@@ -233,16 +233,47 @@ public struct PlainButtonStyle : PrimitiveButtonStyle {
     public let identifier = 1 // For bridging
 }
 
+/// A button style that places the label on a Liquid Glass capsule.
+///
+/// On Android the label sits on Liquid Glass wherever `EnvironmentValues.liquidGlass` allows it, and the button
+/// renders as `.bordered` otherwise. In a toolbar, adjacent `.glass` items share one capsule, as on iOS.
+///
+/// ```swift
+/// Button("Edit") { edit() }
+///     .buttonStyle(.glass)
+/// ```
 public struct GlassButtonStyle : PrimitiveButtonStyle {
-    @available(*, unavailable)
-    public init() {
+    /// Creates a glass button style.
+    public init() { // Liquid Glass: see SkipUI Button+LiquidGlass.swift
     }
 
     @MainActor @preconcurrency public func makeBody(configuration: GlassButtonStyle.Configuration) -> some View {
-        stubView()
+        Button(configuration).buttonStyle(self) // Liquid Glass: rendered natively through the bridged identifier
     }
 
     public let identifier = 5 // For bridging
+}
+
+/// A button style that places the label on a Liquid Glass capsule tinted with the button's `tint`, for the most
+/// prominent action in a group.
+///
+/// On Android the label sits on tinted Liquid Glass wherever `EnvironmentValues.liquidGlass` allows it, and the button
+/// renders as `.borderedProminent` otherwise. In a toolbar it is always a capsule of its own.
+///
+/// ```swift
+/// Button("Done") { finish() }
+///     .buttonStyle(.glassProminent)
+/// ```
+public struct GlassProminentButtonStyle : PrimitiveButtonStyle { // Liquid Glass: see SkipUI Button+LiquidGlass.swift
+    /// Creates a prominent glass button style.
+    public init() {
+    }
+
+    @MainActor @preconcurrency public func makeBody(configuration: GlassProminentButtonStyle.Configuration) -> some View {
+        Button(configuration).buttonStyle(self)
+    }
+
+    public let identifier = 6 // For bridging
 }
 
 public struct M3TextButtonStyle : PrimitiveButtonStyle {
@@ -303,9 +334,16 @@ extension PrimitiveButtonStyle where Self == BorderedProminentButtonStyle {
 }
 
 extension PrimitiveButtonStyle where Self == GlassButtonStyle {
-    @available(*, unavailable)
-    @MainActor @preconcurrency public static var glass: GlassButtonStyle {
-        fatalError()
+    /// A button style that places the label on a Liquid Glass capsule.
+    @MainActor @preconcurrency public static var glass: GlassButtonStyle { // Liquid Glass: see SkipUI Button+LiquidGlass.swift
+        return GlassButtonStyle()
+    }
+}
+
+extension PrimitiveButtonStyle where Self == GlassProminentButtonStyle {
+    /// A button style that places the label on a tinted Liquid Glass capsule, for the most prominent action.
+    @MainActor @preconcurrency public static var glassProminent: GlassProminentButtonStyle { // Liquid Glass: see SkipUI Button+LiquidGlass.swift
+        return GlassProminentButtonStyle()
     }
 }
 
