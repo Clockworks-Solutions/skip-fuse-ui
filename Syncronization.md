@@ -14,13 +14,13 @@ Keep our forks (`skip-ui`, `skip-fuse-ui`) up to date with upstream (`skiptools`
  ┌──────────────────────────────────────────────────────────────┐
  │ 2. FORK MAIN                                                 │
  │                                                              │
- │    main ──branch──► sync/upstream-into-main					│
- │                         ▲       ▲                       		│
- │       pending branches ─┘       └─ upstream/main        		│
+ │    main ──branch──► sync/upstream-into-main                  │
+ │                         ▲       ▲                            │
+ │       pending branches ─┘       └─ upstream/main             │
  │                                                              │
- │    	  sync/upstream-into-main ──PR──► main 					│
+ │    sync/upstream-into-main ──PR──► main                      │
  └──────────────────────────────┬───────────────────────────────┘
-								|
+                                |
                                 ▼  (after the PR is merged)
  ┌──────────────────────────────────────────────────────────────┐
  │ 3. LIQUID-GLASS                                              │
@@ -73,7 +73,7 @@ Start only after the Step 2 PR is merged.
 | Rule | Why |
 |---|---|
 | Always pull the latest branches first | Merging old branches brings back conflicts that are already fixed |
-| Only use merge commits on sync PRs | Set the PR base repo to `Clockworks-Solutions` 
+| Only use merge commits on sync PRs | Set the PR base repo to `Clockworks-Solutions`
 | On a fork, GitHub targets upstream by default |
 | Do Step 3 only after the Step 2 PR is merged | `liquid-glass` must take the merged `main` |
 | Repeat everything for this repo | `skip-ui` first, then `skip-fuse-ui` |
