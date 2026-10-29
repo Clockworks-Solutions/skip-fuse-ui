@@ -68,9 +68,10 @@ extension View {
 }
 
 extension View {
-    @available(*, unavailable)
     nonisolated public func focusable(_ isFocusable: Bool = true) -> some View {
-        stubView()
+        return ModifierView(target: self) {
+            $0.Java_viewOrEmpty.focusable(isFocusable)
+        }
     }
 
     @available(*, unavailable)
